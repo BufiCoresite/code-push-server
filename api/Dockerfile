@@ -1,7 +1,5 @@
-# Node.js base image
 FROM node:18-alpine
 
-# Çalışma dizinini oluştur
 WORKDIR /app
 
 # Package dosyalarını kopyala
@@ -19,5 +17,8 @@ RUN npm run build
 # Port'u aç
 EXPOSE 3000
 
+# Environment variables için .env dosyası oluştur
+#RUN touch .env
+
 # Uygulamayı başlat
-CMD ["npm", "run", "start:env"]
+CMD ["sh", "-c", "node -r dotenv/config ./bin/script/server.js"]
