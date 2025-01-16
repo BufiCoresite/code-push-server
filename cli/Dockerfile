@@ -4,14 +4,16 @@ FROM node:18-alpine
 # Çalışma dizinini oluştur
 WORKDIR /app
 
-# CLI kaynak kodlarını kopyala
-COPY cli/package*.json ./
+# package.json dosyasını kopyala
+# cli/ yerine ./ kullanıyoruz çünkü Dockerfile zaten cli klasöründe
+COPY package*.json ./
 
 # Bağımlılıkları yükle
 RUN npm install
 
-# CLI kodlarını kopyala
-COPY cli/ .
+# Tüm kaynak kodlarını kopyala
+# cli/ yerine ./ kullanıyoruz
+COPY . .
 
 # TypeScript'i derle
 RUN npm run build
