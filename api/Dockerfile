@@ -1,24 +1,31 @@
 FROM node:18-alpine
 
+# Çalışma dizinini oluştur
 WORKDIR /app
 
-# Package dosyalarını kopyala
+# Önce package.json dosyalarını kopyala
 COPY package*.json ./
 
 # Bağımlılıkları yükle
 RUN npm install
 
-# Tüm kaynak kodları kopyala
+# Tüm proje dosyalarını kopyala
 COPY . .
 
-# TypeScript'i derle
+# Gerekli dizinleri oluştur
+RUN mkdir -p /app/data /app/bin/script
+
+# Derleme işlemi
 RUN npm run build
 
-# Port'u aç
+# İzinleri ayarla
+RUN chmod -R 755 /app/bin
+
+# Environment dosyası oluştur
+RUN touch .env
+
+# Port
 EXPOSE 3000
 
-# Environment variables için .env dosyası oluştur
-#RUN touch .env
-
-# Uygulamayı başlat
-CMD ["sh", "-c", "node -r dotenv/config ./bin/script/server.js"]
+# Çalıştırma komutu
+CMD ["sh", "-c", "NODE_ENV=production node -r dotenv/config /app/bin/script/server.js"]
